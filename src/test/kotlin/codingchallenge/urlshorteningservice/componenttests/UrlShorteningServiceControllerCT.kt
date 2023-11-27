@@ -47,7 +47,13 @@ class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
 
         val response = getUrlByIdentifier("fb6b")
 
-        assertThat(response.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo("""{"url":"https://www.i-love-you.com"}""")
+    }
+
+    @Test
+    fun `api returns not found if url mapping is not present`() {
+        val response = getUrlByIdentifier("none")
+        assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
     }
 }

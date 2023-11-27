@@ -32,7 +32,7 @@ class UrlShorteningServiceSpecification {
         val uri = URI.create("http://localhost:8090/create-url-identifier")
 
         return try {
-            return restTemplate.postForEntity<String>(uri, httpEntity)
+            restTemplate.postForEntity<String>(uri, httpEntity)
         } catch (e: HttpStatusCodeException) {
             ResponseEntity.status(e.statusCode).headers(e.responseHeaders)
                 .body(e.responseBodyAsString)
@@ -40,6 +40,11 @@ class UrlShorteningServiceSpecification {
     }
 
     fun getUrlByIdentifier(identifier: String): ResponseEntity<String> {
-        return restTemplate.getForEntity("http://localhost:8090/get-url/$identifier", String::class.java)
+        return try {
+            restTemplate.getForEntity("http://localhost:8090/get-url/$identifier", String::class.java)
+        } catch (e: HttpStatusCodeException) {
+            ResponseEntity.status(e.statusCode).headers(e.responseHeaders)
+                .body(e.responseBodyAsString)
+        }
     }
 }

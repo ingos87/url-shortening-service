@@ -22,6 +22,9 @@ class UrlShorteningServiceController(
     @GetMapping("/get-url/{identifier}")
     fun getUrlByIdentifier(@PathVariable identifier: String): ResponseEntity<UrlVO> {
         val fromDb = urlIdentifierMappingRepository.findByUrlIdentifier(identifier)
-        return ResponseEntity.ok().body(UrlVO(url = fromDb[0].url))
+        if (fromDb.size == 1) {
+            return ResponseEntity.ok().body(UrlVO(url = fromDb[0].url))
+        }
+        return ResponseEntity.notFound().build()
     }
 }
