@@ -1,6 +1,5 @@
 package codingchallenge.urlshorteningservice.componenttests
 
-import codingchallenge.urlshorteningservice.UrlShorteningServiceSpecification
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -18,7 +17,7 @@ class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
         val response = createUrlIdentifier(json)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo("""{"url_identifier":"hello world"}""")
+        assertThat(response.body).isEqualTo("""{"url_identifier":"fb6b"}""")
     }
 
     @ParameterizedTest
