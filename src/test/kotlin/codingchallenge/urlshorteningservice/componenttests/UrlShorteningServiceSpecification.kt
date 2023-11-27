@@ -38,4 +38,8 @@ class UrlShorteningServiceSpecification {
                 .body(e.responseBodyAsString)
         }
     }
+
+    fun getUrlByIdentifier(identifier: String): ResponseEntity<String> {
+        return restTemplate.getForEntity("http://localhost:8090/get-url/$identifier", String::class.java)
+    }
 }

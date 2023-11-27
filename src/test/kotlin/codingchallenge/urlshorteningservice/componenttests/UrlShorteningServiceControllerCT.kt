@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 
 
 class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
@@ -37,5 +38,16 @@ class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
         val longDomain = "d".repeat(2050)
         val response = createUrlIdentifier("""{"url" : "https://www.${longDomain}.com"}""")
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun `api returns a valid value when retrieving a url by its identifier`() {
+        val json = """{"url" : "https://www.i-love-you.com"}"""
+        createUrlIdentifier(json) // persists fb6b
+
+        val response = getUrlByIdentifier("fb6b")
+
+        assertThat(response.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+        assertThat(response.body).isEqualTo("""{"url":"https://www.i-love-you.com"}""")
     }
 }
