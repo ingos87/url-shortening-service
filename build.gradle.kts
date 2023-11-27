@@ -27,6 +27,10 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
+
+	implementation("io.swagger.core.v3:swagger-annotations-jakarta:2.2.19")
+	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
