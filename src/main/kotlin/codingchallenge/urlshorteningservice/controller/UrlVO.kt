@@ -13,7 +13,7 @@ data class UrlVO(
         description = "A URL string to be shortened",
         example = "https://i-see-you.com",
         )
-    @field:Size(max = 2048)
+    @field:Size(max = 2048, message = "URL length must not exceed 2048 characters") // not working...
     @field:NotNull
     val url: String,
 )

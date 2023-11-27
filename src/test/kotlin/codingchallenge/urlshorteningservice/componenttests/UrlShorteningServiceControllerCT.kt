@@ -32,7 +32,6 @@ class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
-    @Disabled // fix later
     @Test
     fun `api returns BAD_REQUEST on too long url`() {
         val longDomain = "d".repeat(2050)
