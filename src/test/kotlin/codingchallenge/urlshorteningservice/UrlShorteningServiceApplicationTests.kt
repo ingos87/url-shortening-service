@@ -9,5 +9,4 @@ class UrlShorteningServiceApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
-
 }
