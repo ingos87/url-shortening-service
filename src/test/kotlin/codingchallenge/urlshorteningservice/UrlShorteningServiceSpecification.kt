@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import java.net.URI
@@ -30,6 +31,11 @@ class UrlShorteningServiceSpecification {
         )
         val uri = URI.create("http://localhost:8090/create-url-identifier")
 
-        return restTemplate.postForEntity<String>(uri, httpEntity)
+        return try {
+            return restTemplate.postForEntity<String>(uri, httpEntity)
+        } catch (e: HttpStatusCodeException) {
+            ResponseEntity.status(e.statusCode).headers(e.responseHeaders)
+                .body(e.responseBodyAsString)
+        }
     }
 }
