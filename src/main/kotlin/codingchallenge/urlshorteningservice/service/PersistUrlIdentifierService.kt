@@ -12,6 +12,14 @@ class PersistUrlIdentifierService(
 
     fun persistUrlIdentifierMapping(url: String): String {
         val identifier = urlIdentifierCalculator.calculateIdentifier(url)
+
+        val maybeMapping = urlIdentifierMappingRepository.findByUrlIdentifier(identifier)
+        if (maybeMapping.isNotEmpty()) {
+            if (maybeMapping[0].url == url) {
+                return identifier
+            }
+        }
+
         urlIdentifierMappingRepository.save(UrlIdentifierMapping(identifier, url))
         return identifier
     }

@@ -21,16 +21,16 @@ Have fun with our coding challenge. If you have any questions, don’t hesitate 
 - read/write ratio could be around 1:100
 - design issues:
   - must be fault-tolerant to malicious input
-  - load balancing ... out of scope for the MVP
+  - load balancing *
   - horizontal scalability is important
   - should use caching for faster accessibility
-  - security/authentication ... out of scope for the MVP
-  - include logging and monitoring for proactive troubleshooting
-  - add analytics ... out of scope for the MVP
+  - security/authentication *
+  - include logging and monitoring for proactive troubleshooting *
+  - add analytics *
 - features
   - endpoint for creating identifier for a given URL
   - endpoint for retrieval of full URL for a given identifier
-  - endpoint(s) for analytics ... out of scope for the MVP
+  - endpoint(s) for analytics *
 - algorithm
   - 4 char substring of md5 should suffice
   - collisions have to be mitigated
@@ -38,6 +38,7 @@ Have fun with our coding challenge. If you have any questions, don’t hesitate 
   - service-external databases or key-value stores (caching) have to be set up
   - backup- and restore concept needed
   
+*) out of scope for the MVP
 
 # TODO list
 - bootstrap project
