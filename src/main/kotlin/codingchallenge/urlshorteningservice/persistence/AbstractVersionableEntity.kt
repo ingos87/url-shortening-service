@@ -1,14 +1,9 @@
 package codingchallenge.urlshorteningservice.persistence
 
-import jakarta.persistence.Column
-import jakarta.persistence.Id
-import jakarta.persistence.MappedSuperclass
-import jakarta.persistence.PrePersist
-import jakarta.persistence.PreUpdate
-import jakarta.persistence.Version
+import jakarta.persistence.*
 import org.springframework.data.domain.Persistable
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 /**
  * The super class for all entities. Providing:

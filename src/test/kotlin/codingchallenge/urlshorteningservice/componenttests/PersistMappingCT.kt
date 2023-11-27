@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 
 class PersistMappingCT @Autowired constructor(
     val urlIdentifierMappingRepository: UrlIdentifierMappingRepository
@@ -43,5 +42,19 @@ class PersistMappingCT @Autowired constructor(
         assertThat(dbContent.size).isEqualTo(1)
         assertThat(dbContent[0].urlIdentifier).isEqualTo("fb6b")
         assertThat(dbContent[0].url).isEqualTo("https://www.i-love-you.com")
+    }
+
+    @Test
+    fun `api will persist different mapping if identifier is already taken by another url`() {
+        createUrlIdentifier("""{"url" : "1081"}""") // 36a16a2505369e0c922b6ea7a23a56d2
+        createUrlIdentifier("""{"url" : "1172"}""") // 36a1694bce9815b7e38a9dad05ad42e0
+
+        val dbContent = urlIdentifierMappingRepository.findAll()
+        assertThat(dbContent.size).isEqualTo(2)
+        assertThat(dbContent[0].urlIdentifier).isEqualTo("36a1")
+        assertThat(dbContent[0].url).isEqualTo("1081")
+        assertThat(dbContent[1].urlIdentifier).startsWith("36a1")
+        assertThat(dbContent[1].urlIdentifier.length).isGreaterThan(4)
+        assertThat(dbContent[1].url).isEqualTo("1172")
     }
 }
