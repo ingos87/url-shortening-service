@@ -2,7 +2,9 @@ package codingchallenge.urlshorteningservice.service
 
 import codingchallenge.urlshorteningservice.persistence.UrlIdentifierMapping
 import codingchallenge.urlshorteningservice.persistence.UrlIdentifierMappingRepository
+import jakarta.persistence.UniqueConstraint
 import org.apache.commons.lang3.RandomStringUtils
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 
 @Service
@@ -11,26 +13,19 @@ class PersistUrlIdentifierService(
     val urlIdentifierCalculator: UrlIdentifierCalculator,
 ) {
 
-    fun persistUrlIdentifierMapping(url: String): String {
-        var identifier = urlIdentifierCalculator.calculateIdentifier(url)
-
-        val maybeMapping = urlIdentifierMappingRepository.findByUrlIdentifier(identifier)
-        if (maybeMapping.isNotEmpty()) {
-            if (maybeMapping[0].url == url) {
-                return identifier
+    fun persistUrlIdentifierMapping(url: String, identifierSuffix: String = ""): String {
+        val identifier = urlIdentifierCalculator.calculateIdentifier(url) + identifierSuffix
+        try {
+            urlIdentifierMappingRepository.save(UrlIdentifierMapping(identifier, url))
+        } catch (e: DataIntegrityViolationException) {
+            val maybeMapping = urlIdentifierMappingRepository.findByUrlIdentifier(identifier)
+            return if (maybeMapping.isNotEmpty() && maybeMapping[0].url == url) {
+                identifier
+            } else {
+                persistUrlIdentifierMapping(url, RandomStringUtils.randomAlphanumeric(1).lowercase())
             }
-            do {
-                // TODO monitor this in the future. We need to rethink if this generates too many db reads
-                identifier += RandomStringUtils.randomAlphanumeric(1).lowercase()
-            } while(isIdentifierTaken(identifier))
         }
 
-        urlIdentifierMappingRepository.save(UrlIdentifierMapping(identifier, url))
         return identifier
     }
-
-    private fun isIdentifierTaken(urlIdentifier: String): Boolean {
-        return urlIdentifierMappingRepository.findByUrlIdentifier(urlIdentifier).isNotEmpty()
-    }
-
 }

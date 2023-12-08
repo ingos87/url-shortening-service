@@ -21,17 +21,17 @@ class UrlShorteningServiceController(
 
     @Operation(
         summary = "Receives a single string (e.g. an URL), creates a hash and saves both." +
-                "The identifier (hash) is returned, enabling the user zu retrieve the full URL later.",
+                "The identifier (hash) is returned, enabling the user to retrieve the full URL later.",
     )
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "200",
-                description = "OK, when data was persisted and resulting identifier returned",
+                responseCode = "201",
+                description = "CREATED, when data was persisted and resulting identifier returned",
             ), ApiResponse(responseCode = "400", description = "Bad Request", content = [Content(schema = Schema(implementation = Problem::class))]),
         ],
     )
-    @PostMapping("/create-url-identifier", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/url", consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun persistUrlMapping(@RequestBody @Valid request: UrlVO): ResponseEntity<UrlIdentifierVO> {
         // bean validation simply doesn't work
         if (request.url.length > 2048) {
@@ -61,8 +61,12 @@ class UrlShorteningServiceController(
             ),
         ],
     )
-    @GetMapping("/get-url/{identifier}")
-    fun getUrlByIdentifier(@PathVariable identifier: String): ResponseEntity<UrlVO> {
+    @GetMapping("/url/{identifier}")
+    fun getUrlByIdentifier(@PathVariable @Valid identifier: String?): ResponseEntity<UrlVO> {
+        // bean validation simply doesn't work
+        if (identifier == null || identifier.length > 32) {
+            return ResponseEntity.badRequest().build()
+        }
         val fromDb = urlIdentifierMappingRepository.findByUrlIdentifier(identifier)
         return if (fromDb.size == 1) {
             ResponseEntity.ok(UrlVO(url = fromDb[0].url))

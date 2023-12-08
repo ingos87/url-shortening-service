@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Size
-import org.jetbrains.annotations.NotNull
+import jakarta.validation.constraints.NotNull
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class UrlIdentifierVO(
@@ -14,6 +14,5 @@ data class UrlIdentifierVO(
         example = "420d",
         )
     @field:Size(max = 32)
-    @field:NotNull
-    val urlIdentifier: String,
+    val urlIdentifier: String?,
 )
