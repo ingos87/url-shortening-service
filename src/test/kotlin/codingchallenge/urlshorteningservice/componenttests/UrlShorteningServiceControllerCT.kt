@@ -15,7 +15,7 @@ class UrlShorteningServiceControllerCT: UrlShorteningServiceSpecification() {
 
         val response = createUrlIdentifier(json)
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isEqualTo("""{"url_identifier":"fb6b"}""")
     }
 

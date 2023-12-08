@@ -22,7 +22,7 @@ class PersistMappingCT @Autowired constructor(
 
         val response = createUrlIdentifier(json)
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
 
         val dbContent = urlIdentifierMappingRepository.findAll()
         assertThat(dbContent.size).isEqualTo(1)
@@ -33,10 +33,10 @@ class PersistMappingCT @Autowired constructor(
     @Test
     fun `api will not persist duplicate mappings`() {
         val response = createUrlIdentifier("""{"url" : "https://www.i-love-you.com"}""")
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
 
         val response2 = createUrlIdentifier("""{"url" : "https://www.i-love-you.com"}""")
-        assertThat(response2.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response2.statusCode).isEqualTo(HttpStatus.CREATED)
 
         val dbContent = urlIdentifierMappingRepository.findAll()
         assertThat(dbContent.size).isEqualTo(1)

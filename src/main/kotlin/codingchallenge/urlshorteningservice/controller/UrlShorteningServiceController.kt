@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.validation.Valid
 import org.springframework.beans.factory.parsing.Problem
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -38,7 +39,7 @@ class UrlShorteningServiceController(
             return ResponseEntity.badRequest().build()
         }
         val identifier = persistUrlIdentifierService.persistUrlIdentifierMapping(request.url)
-        return ResponseEntity.ok().body(UrlIdentifierVO(urlIdentifier = identifier))
+        return ResponseEntity<UrlIdentifierVO>(UrlIdentifierVO(urlIdentifier = identifier), HttpStatus.CREATED)
     }
 
     @Operation(
